@@ -21,10 +21,8 @@ env:
 - HOST=mipsel-linux-gnu OPT=-O3
 - HOST=powerpc64-linux-gnu OPT=-O3
 
-linux-s390x: &linux-s390x
+linux: &linux
   os: linux
-  arch: s390x
-  env: HOST=s390x-linux-gnu BUILD=s390x-linux-gnu
   script:
     - |
       CFLAGS="$OPT"
@@ -75,7 +73,12 @@ after_failure: cat tests/test-suite.log 2>/dev/null
 
 jobs:
   include:
-    - <<: *linux-s390x
+    - <<: *linux
+      arch: powerpc64le
+      env: HOST=powerpc64le-linux-gnu BUILD=powerpc64le-linux-gnu
+    - <<: *linux
+      arch: s390x
+      env: HOST=s390x-linux-gnu BUILD=s390x-linux-gnu
     - <<: *windows-remote-only
       env: WINHOST=x64 TARGET=x86_64-linux-gnu
     - <<: *windows-remote-only
